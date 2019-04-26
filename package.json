@@ -1,0 +1,38 @@
+{
+  "name": "@terrencecrowley/dbabstract",
+  "version": "1.0.2",
+  "description": "Simple abstract database layer that allows mocking for local development.",
+  "main": "dist/db.js",
+  "types": "./dist/all.d.ts",
+  "scripts": {
+    "test": "echo \"No test defined.\"",
+    "build": "webpack",
+    "webpack": "node_modules/.bin/webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/terrencecrowley/dbabstract.git"
+  },
+  "keywords": [
+    "Typescript"
+  ],
+  "author": "Terry Crowley",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/terrencecrowley/dbabstract/issues"
+  },
+  "homepage": "https://github.com/terrencecrowley/dbabstract#readme",
+  "devDependencies": {
+    "@types/node": "10.12.23",
+    "source-map-loader": "^0.2.4",
+    "ts-loader": "^5.3.3",
+    "tsify": "^4.0.1",
+    "typescript": "^3.3.3",
+    "webpack": "^4.29.3",
+    "webpack-cli": "^3.2.3"
+  },
+  "dependencies": {
+    "@terrencecrowley/fsm": "^1.0.1",
+    "@terrencecrowley/storage": "^1.0.1"
+  }
+}
