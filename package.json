@@ -1,6 +1,6 @@
 {
   "name": "@terrencecrowley/dbabstract",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Simple abstract database layer that allows mocking for local development.",
   "main": "dist/db.js",
   "types": "./dist/all.d.ts",
@@ -32,7 +32,7 @@
     "webpack-cli": "^3.2.3"
   },
   "dependencies": {
-    "@terrencecrowley/fsm": "^1.0.1",
-    "@terrencecrowley/storage": "^1.0.1"
+    "@terrencecrowley/fsm": "^1.0.3",
+    "@terrencecrowley/storage": "^1.0.8"
   }
 }
