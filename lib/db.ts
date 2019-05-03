@@ -1,4 +1,6 @@
 // Shared libraries
+import * as LogAbstract from '@terrencecrowley/logabstract';
+import * as Context from '@terrencecrowley/context';
 import * as Storage from '@terrencecrowley/storage';
 import * as FSM from '@terrencecrowley/fsm';
 
@@ -10,23 +12,30 @@ export const FSM_READING: number = FSM.FSM_CUSTOM4;
 
 type CollectionIndex = { [key: string]: DBCollection };
 
+export interface DBEnvironment
+{
+  context: Context.IContext;
+  log: LogAbstract.ILog;
+  fsmManager: FSM.FsmManager;
+  storageManager: Storage.StorageManager;
+}
+
 export class DBClient extends FSM.Fsm
 {
-  storageManager: Storage.StorageManager;
+  constructor(env: DBEnvironment)
+  {
+    super(env);
+  }
 
-  constructor(typeName: string, storageManager: Storage.StorageManager)
-    {
-      super(typeName);
-      this.storageManager = storageManager;
-    }
+  get env(): DBEnvironment { return this._env as DBEnvironment; }
 
-  createCollection(name: string, options: any): DBCollection {  return new DBCollection('DBCollection', this, name, options); }
-  createUpdate(col: DBCollection, query: any, values: any): DBUpdate { return new DBUpdate('DBUpdate', col, query, values); }
-  createDelete(col: DBCollection, query: any): DBDelete { return new DBDelete('DBDelete', col, query); }
-  createFind(col: DBCollection, filter: any): DBFind { return new DBFind('DBFind', col, filter); }
-  createQuery(col: DBCollection, filter: any): DBQuery { return new DBQuery('DBQuery', col, filter); }
-  createIndex(col: DBCollection, uid: string): DBIndex { return new DBIndex('DBIndex', col, uid); }
-  createClose(): DBClose { return new DBClose('DBClose', this); }
+  createCollection(name: string, options: any): DBCollection {  return new DBCollection(this.env, this, name, options); }
+  createUpdate(col: DBCollection, query: any, values: any): DBUpdate { return new DBUpdate(this.env, col, query, values); }
+  createDelete(col: DBCollection, query: any): DBDelete { return new DBDelete(this.env, col, query); }
+  createFind(col: DBCollection, filter: any): DBFind { return new DBFind(this.env, col, filter); }
+  createQuery(col: DBCollection, filter: any): DBQuery { return new DBQuery(this.env, col, filter); }
+  createIndex(col: DBCollection, uid: string): DBIndex { return new DBIndex(this.env, col, uid); }
+  createClose(): DBClose { return new DBClose(this.env, this); }
 
   close(): void
     {
@@ -42,9 +51,9 @@ export class DBCollection extends FSM.Fsm
   col: any;
   client: DBClient;
 
-  constructor(typeName: string, client: DBClient, name: string, options: any)
+  constructor(env: DBEnvironment, client: DBClient, name: string, options: any)
     {
-      super(typeName);
+      super(env);
       this.waitOn(client);
       this.client = client;
       this.name = name;
@@ -65,9 +74,9 @@ export class DBUpdate extends FSM.Fsm
   values: any;
   result: any;
 
-  constructor(typeName: string, col: DBCollection, query: any, values: any)
+  constructor(env: DBEnvironment, col: DBCollection, query: any, values: any)
     {
-      super(typeName);
+      super(env);
       this.waitOn(col);
       this.col = col;
       this.query = query;
@@ -87,9 +96,9 @@ export class DBDelete extends FSM.Fsm
   query: any;
   result: any;
 
-  constructor(typeName: string, col: DBCollection, query: any)
+  constructor(env: DBEnvironment, col: DBCollection, query: any)
     {
-      super(typeName);
+      super(env);
       this.waitOn(col);
       this.col = col;
       this.query = query;
@@ -108,9 +117,9 @@ export class DBFind extends FSM.Fsm
   filter: any;
   result: any;
 
-  constructor(typeName: string, col: DBCollection, filter: any)
+  constructor(env: DBEnvironment, col: DBCollection, filter: any)
     {
-      super(typeName);
+      super(env);
       this.waitOn(col);
       this.col = col;
       this.filter = filter;
@@ -129,9 +138,9 @@ export class DBQuery extends FSM.Fsm
   filter: any;
   result: any[];
 
-  constructor(typeName: string, col: DBCollection, filter: any)
+  constructor(env: DBEnvironment, col: DBCollection, filter: any)
     {
-      super(typeName);
+      super(env);
       this.waitOn(col);
       this.col = col;
       this.filter = filter;
@@ -149,9 +158,9 @@ export class DBIndex extends FSM.Fsm
   col: DBCollection;
   uid: string;
 
-  constructor(typeName: string, col: DBCollection, uid: string)
+  constructor(env: DBEnvironment, col: DBCollection, uid: string)
     {
-      super(typeName);
+      super(env);
       this.waitOn(col);
       this.col = col;
       this.uid = uid;
@@ -167,9 +176,9 @@ export class DBClose extends FSM.Fsm
 {
   client: DBClient;
 
-  constructor(typeName: string, client: DBClient)
+  constructor(env: DBEnvironment, client: DBClient)
     {
-      super(typeName);
+      super(env);
       this.client = client;
     }
 

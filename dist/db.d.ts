@@ -1,12 +1,20 @@
+import * as LogAbstract from '@terrencecrowley/logabstract';
+import * as Context from '@terrencecrowley/context';
 import * as Storage from '@terrencecrowley/storage';
 import * as FSM from '@terrencecrowley/fsm';
 export declare const FSM_CREATING: number;
 export declare const FSM_NEEDRELEASE: number;
 export declare const FSM_RELEASING: number;
 export declare const FSM_READING: number;
-export declare class DBClient extends FSM.Fsm {
+export interface DBEnvironment {
+    context: Context.IContext;
+    log: LogAbstract.ILog;
+    fsmManager: FSM.FsmManager;
     storageManager: Storage.StorageManager;
-    constructor(typeName: string, storageManager: Storage.StorageManager);
+}
+export declare class DBClient extends FSM.Fsm {
+    constructor(env: DBEnvironment);
+    readonly env: DBEnvironment;
     createCollection(name: string, options: any): DBCollection;
     createUpdate(col: DBCollection, query: any, values: any): DBUpdate;
     createDelete(col: DBCollection, query: any): DBDelete;
@@ -21,7 +29,7 @@ export declare class DBCollection extends FSM.Fsm {
     options: any;
     col: any;
     client: DBClient;
-    constructor(typeName: string, client: DBClient, name: string, options: any);
+    constructor(env: DBEnvironment, client: DBClient, name: string, options: any);
     readonly isChildError: boolean;
 }
 export declare class DBUpdate extends FSM.Fsm {
@@ -29,39 +37,39 @@ export declare class DBUpdate extends FSM.Fsm {
     query: any;
     values: any;
     result: any;
-    constructor(typeName: string, col: DBCollection, query: any, values: any);
+    constructor(env: DBEnvironment, col: DBCollection, query: any, values: any);
     readonly isChildError: boolean;
 }
 export declare class DBDelete extends FSM.Fsm {
     col: DBCollection;
     query: any;
     result: any;
-    constructor(typeName: string, col: DBCollection, query: any);
+    constructor(env: DBEnvironment, col: DBCollection, query: any);
     readonly isChildError: boolean;
 }
 export declare class DBFind extends FSM.Fsm {
     col: DBCollection;
     filter: any;
     result: any;
-    constructor(typeName: string, col: DBCollection, filter: any);
+    constructor(env: DBEnvironment, col: DBCollection, filter: any);
     readonly isChildError: boolean;
 }
 export declare class DBQuery extends FSM.Fsm {
     col: DBCollection;
     filter: any;
     result: any[];
-    constructor(typeName: string, col: DBCollection, filter: any);
+    constructor(env: DBEnvironment, col: DBCollection, filter: any);
     readonly isChildError: boolean;
 }
 export declare class DBIndex extends FSM.Fsm {
     col: DBCollection;
     uid: string;
-    constructor(typeName: string, col: DBCollection, uid: string);
+    constructor(env: DBEnvironment, col: DBCollection, uid: string);
     readonly isChildError: boolean;
 }
 export declare class DBClose extends FSM.Fsm {
     client: DBClient;
-    constructor(typeName: string, client: DBClient);
+    constructor(env: DBEnvironment, client: DBClient);
     readonly isChildError: boolean;
     tick(): void;
 }

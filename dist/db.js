@@ -131,17 +131,17 @@ exports.FSM_NEEDRELEASE = FSM.FSM_CUSTOM2;
 exports.FSM_RELEASING = FSM.FSM_CUSTOM3;
 exports.FSM_READING = FSM.FSM_CUSTOM4;
 class DBClient extends FSM.Fsm {
-    constructor(typeName, storageManager) {
-        super(typeName);
-        this.storageManager = storageManager;
+    constructor(env) {
+        super(env);
     }
-    createCollection(name, options) { return new DBCollection('DBCollection', this, name, options); }
-    createUpdate(col, query, values) { return new DBUpdate('DBUpdate', col, query, values); }
-    createDelete(col, query) { return new DBDelete('DBDelete', col, query); }
-    createFind(col, filter) { return new DBFind('DBFind', col, filter); }
-    createQuery(col, filter) { return new DBQuery('DBQuery', col, filter); }
-    createIndex(col, uid) { return new DBIndex('DBIndex', col, uid); }
-    createClose() { return new DBClose('DBClose', this); }
+    get env() { return this._env; }
+    createCollection(name, options) { return new DBCollection(this.env, this, name, options); }
+    createUpdate(col, query, values) { return new DBUpdate(this.env, col, query, values); }
+    createDelete(col, query) { return new DBDelete(this.env, col, query); }
+    createFind(col, filter) { return new DBFind(this.env, col, filter); }
+    createQuery(col, filter) { return new DBQuery(this.env, col, filter); }
+    createIndex(col, uid) { return new DBIndex(this.env, col, uid); }
+    createClose() { return new DBClose(this.env, this); }
     close() {
         if (this.state == FSM.FSM_DONE)
             this.setState(exports.FSM_NEEDRELEASE);
@@ -149,8 +149,8 @@ class DBClient extends FSM.Fsm {
 }
 exports.DBClient = DBClient;
 class DBCollection extends FSM.Fsm {
-    constructor(typeName, client, name, options) {
-        super(typeName);
+    constructor(env, client, name, options) {
+        super(env);
         this.waitOn(client);
         this.client = client;
         this.name = name;
@@ -163,8 +163,8 @@ class DBCollection extends FSM.Fsm {
 }
 exports.DBCollection = DBCollection;
 class DBUpdate extends FSM.Fsm {
-    constructor(typeName, col, query, values) {
-        super(typeName);
+    constructor(env, col, query, values) {
+        super(env);
         this.waitOn(col);
         this.col = col;
         this.query = query;
@@ -177,8 +177,8 @@ class DBUpdate extends FSM.Fsm {
 }
 exports.DBUpdate = DBUpdate;
 class DBDelete extends FSM.Fsm {
-    constructor(typeName, col, query) {
-        super(typeName);
+    constructor(env, col, query) {
+        super(env);
         this.waitOn(col);
         this.col = col;
         this.query = query;
@@ -190,8 +190,8 @@ class DBDelete extends FSM.Fsm {
 }
 exports.DBDelete = DBDelete;
 class DBFind extends FSM.Fsm {
-    constructor(typeName, col, filter) {
-        super(typeName);
+    constructor(env, col, filter) {
+        super(env);
         this.waitOn(col);
         this.col = col;
         this.filter = filter;
@@ -203,8 +203,8 @@ class DBFind extends FSM.Fsm {
 }
 exports.DBFind = DBFind;
 class DBQuery extends FSM.Fsm {
-    constructor(typeName, col, filter) {
-        super(typeName);
+    constructor(env, col, filter) {
+        super(env);
         this.waitOn(col);
         this.col = col;
         this.filter = filter;
@@ -216,8 +216,8 @@ class DBQuery extends FSM.Fsm {
 }
 exports.DBQuery = DBQuery;
 class DBIndex extends FSM.Fsm {
-    constructor(typeName, col, uid) {
-        super(typeName);
+    constructor(env, col, uid) {
+        super(env);
         this.waitOn(col);
         this.col = col;
         this.uid = uid;
@@ -228,8 +228,8 @@ class DBIndex extends FSM.Fsm {
 }
 exports.DBIndex = DBIndex;
 class DBClose extends FSM.Fsm {
-    constructor(typeName, client) {
-        super(typeName);
+    constructor(env, client) {
+        super(env);
         this.client = client;
     }
     get isChildError() {
