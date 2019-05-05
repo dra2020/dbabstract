@@ -1,3 +1,12 @@
+var path = require('path');
+var fs = require('fs');
+var externalModules = {};
+fs.readdirSync('node_modules/@terrencecrowley')
+  .forEach((mod) => {
+    mod = '@terrencecrowley/' + mod;
+    externalModules[mod] = 'commonjs ' + mod;
+  });
+
 var libConfig = {
     entry: {
       library: './lib/all.ts'
@@ -14,11 +23,7 @@ var libConfig = {
     // Enable source maps
     devtool: "source-map",
 
-	externals: {
-    "@terrencecrowley/fsm": "commonjs @terrencecrowley/fsm",
-    "@terrencecrowley/storage": "commonjs @terrencecrowley/storage"
-	},
-		
+    externals: externalModules,
 
     module: {
 		rules: [
