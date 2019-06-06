@@ -157,9 +157,6 @@ class DBCollection extends FSM.Fsm {
         this.options = options;
         this.col = null;
     }
-    get isChildError() {
-        return (this.client && this.client.iserror);
-    }
 }
 exports.DBCollection = DBCollection;
 class DBUpdate extends FSM.Fsm {
@@ -171,9 +168,6 @@ class DBUpdate extends FSM.Fsm {
         this.values = values;
         this.result = undefined;
     }
-    get isChildError() {
-        return (this.col && this.col.iserror);
-    }
 }
 exports.DBUpdate = DBUpdate;
 class DBDelete extends FSM.Fsm {
@@ -183,9 +177,6 @@ class DBDelete extends FSM.Fsm {
         this.col = col;
         this.query = query;
         this.result = null;
-    }
-    get isChildError() {
-        return (this.col && this.col.iserror);
     }
 }
 exports.DBDelete = DBDelete;
@@ -197,9 +188,6 @@ class DBFind extends FSM.Fsm {
         this.filter = filter;
         this.result = null;
     }
-    get isChildError() {
-        return (this.col && this.col.iserror);
-    }
 }
 exports.DBFind = DBFind;
 class DBQuery extends FSM.Fsm {
@@ -210,9 +198,6 @@ class DBQuery extends FSM.Fsm {
         this.filter = filter;
         this.result = [];
     }
-    get isChildError() {
-        return (this.col && this.col.iserror);
-    }
 }
 exports.DBQuery = DBQuery;
 class DBIndex extends FSM.Fsm {
@@ -222,9 +207,6 @@ class DBIndex extends FSM.Fsm {
         this.col = col;
         this.uid = uid;
     }
-    get isChildError() {
-        return (this.col && this.col.iserror);
-    }
 }
 exports.DBIndex = DBIndex;
 class DBClose extends FSM.Fsm {
@@ -232,11 +214,8 @@ class DBClose extends FSM.Fsm {
         super(env);
         this.client = client;
     }
-    get isChildError() {
-        return (this.client && this.client.iserror);
-    }
     tick() {
-        if (this.ready && this.isChildError)
+        if (this.ready && this.isDependentError)
             this.setState(FSM.FSM_ERROR);
         else if (this.ready && this.state == FSM.FSM_STARTING) {
             this.client.close();

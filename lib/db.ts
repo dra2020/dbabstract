@@ -60,11 +60,6 @@ export class DBCollection extends FSM.Fsm
       this.options = options;
       this.col = null;
     }
-
-  get isChildError(): boolean
-    {
-      return (this.client && this.client.iserror);
-    }
 }
 
 export class DBUpdate extends FSM.Fsm
@@ -83,11 +78,6 @@ export class DBUpdate extends FSM.Fsm
       this.values = values;
       this.result = undefined;
     }
-
-  get isChildError(): boolean
-    {
-      return (this.col && this.col.iserror);
-    }
 }
 
 export class DBDelete extends FSM.Fsm
@@ -103,11 +93,6 @@ export class DBDelete extends FSM.Fsm
       this.col = col;
       this.query = query;
       this.result = null;
-    }
-
-  get isChildError(): boolean
-    {
-      return (this.col && this.col.iserror);
     }
 }
 
@@ -125,11 +110,6 @@ export class DBFind extends FSM.Fsm
       this.filter = filter;
       this.result = null;
     }
-
-  get isChildError(): boolean
-    {
-      return (this.col && this.col.iserror);
-    }
 }
 
 export class DBQuery extends FSM.Fsm
@@ -146,11 +126,6 @@ export class DBQuery extends FSM.Fsm
       this.filter = filter;
       this.result = [];
     }
-
-  get isChildError(): boolean
-    {
-      return (this.col && this.col.iserror);
-    }
 }
 
 export class DBIndex extends FSM.Fsm
@@ -165,11 +140,6 @@ export class DBIndex extends FSM.Fsm
       this.col = col;
       this.uid = uid;
     }
-
-  get isChildError(): boolean
-    {
-      return (this.col && this.col.iserror);
-    }
 }
 
 export class DBClose extends FSM.Fsm
@@ -182,14 +152,9 @@ export class DBClose extends FSM.Fsm
       this.client = client;
     }
 
-  get isChildError(): boolean
-    {
-      return (this.client && this.client.iserror);
-    }
-
   tick(): void
     {
-      if (this.ready && this.isChildError)
+      if (this.ready && this.isDependentError)
         this.setState(FSM.FSM_ERROR);
       else if (this.ready && this.state == FSM.FSM_STARTING)
       {

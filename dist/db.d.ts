@@ -30,7 +30,6 @@ export declare class DBCollection extends FSM.Fsm {
     col: any;
     client: DBClient;
     constructor(env: DBEnvironment, client: DBClient, name: string, options: any);
-    readonly isChildError: boolean;
 }
 export declare class DBUpdate extends FSM.Fsm {
     col: DBCollection;
@@ -38,38 +37,32 @@ export declare class DBUpdate extends FSM.Fsm {
     values: any;
     result: any;
     constructor(env: DBEnvironment, col: DBCollection, query: any, values: any);
-    readonly isChildError: boolean;
 }
 export declare class DBDelete extends FSM.Fsm {
     col: DBCollection;
     query: any;
     result: any;
     constructor(env: DBEnvironment, col: DBCollection, query: any);
-    readonly isChildError: boolean;
 }
 export declare class DBFind extends FSM.Fsm {
     col: DBCollection;
     filter: any;
     result: any;
     constructor(env: DBEnvironment, col: DBCollection, filter: any);
-    readonly isChildError: boolean;
 }
 export declare class DBQuery extends FSM.Fsm {
     col: DBCollection;
     filter: any;
     result: any[];
     constructor(env: DBEnvironment, col: DBCollection, filter: any);
-    readonly isChildError: boolean;
 }
 export declare class DBIndex extends FSM.Fsm {
     col: DBCollection;
     uid: string;
     constructor(env: DBEnvironment, col: DBCollection, uid: string);
-    readonly isChildError: boolean;
 }
 export declare class DBClose extends FSM.Fsm {
     client: DBClient;
     constructor(env: DBEnvironment, client: DBClient);
-    readonly isChildError: boolean;
     tick(): void;
 }
