@@ -124,7 +124,7 @@ __export(__webpack_require__(/*! ./db */ "./lib/db.ts"));
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const FSM = __webpack_require__(/*! @terrencecrowley/fsm */ "@terrencecrowley/fsm");
+const FSM = __webpack_require__(/*! @dra2020/fsm */ "@dra2020/fsm");
 // Custom DB state codes
 exports.FSM_CREATING = FSM.FSM_CUSTOM1;
 exports.FSM_NEEDRELEASE = FSM.FSM_CUSTOM2;
@@ -228,14 +228,14 @@ exports.DBClose = DBClose;
 
 /***/ }),
 
-/***/ "@terrencecrowley/fsm":
-/*!***************************************!*\
-  !*** external "@terrencecrowley/fsm" ***!
-  \***************************************/
+/***/ "@dra2020/fsm":
+/*!*******************************!*\
+  !*** external "@dra2020/fsm" ***!
+  \*******************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = require("@terrencecrowley/fsm");
+module.exports = require("@dra2020/fsm");
 
 /***/ })
 
