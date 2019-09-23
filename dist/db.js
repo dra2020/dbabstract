@@ -137,6 +137,7 @@ class DBClient extends FSM.Fsm {
     get env() { return this._env; }
     createCollection(name, options) { return new DBCollection(this.env, this, name, options); }
     createUpdate(col, query, values) { return new DBUpdate(this.env, col, query, values); }
+    createUnset(col, query, values) { return new DBUnset(this.env, col, query, values); }
     createDelete(col, query) { return new DBDelete(this.env, col, query); }
     createFind(col, filter) { return new DBFind(this.env, col, filter); }
     createQuery(col, filter) { return new DBQuery(this.env, col, filter); }
@@ -170,6 +171,17 @@ class DBUpdate extends FSM.Fsm {
     }
 }
 exports.DBUpdate = DBUpdate;
+class DBUnset extends FSM.Fsm {
+    constructor(env, col, query, values) {
+        super(env);
+        this.waitOn(col);
+        this.col = col;
+        this.query = query;
+        this.values = values;
+        this.result = undefined;
+    }
+}
+exports.DBUnset = DBUnset;
 class DBDelete extends FSM.Fsm {
     constructor(env, col, query) {
         super(env);

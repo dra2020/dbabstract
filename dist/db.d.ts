@@ -17,6 +17,7 @@ export declare class DBClient extends FSM.Fsm {
     readonly env: DBEnvironment;
     createCollection(name: string, options: any): DBCollection;
     createUpdate(col: DBCollection, query: any, values: any): DBUpdate;
+    createUnset(col: DBCollection, query: any, values: any): DBUnset;
     createDelete(col: DBCollection, query: any): DBDelete;
     createFind(col: DBCollection, filter: any): DBFind;
     createQuery(col: DBCollection, filter: any): DBQuery;
@@ -32,6 +33,13 @@ export declare class DBCollection extends FSM.Fsm {
     constructor(env: DBEnvironment, client: DBClient, name: string, options: any);
 }
 export declare class DBUpdate extends FSM.Fsm {
+    col: DBCollection;
+    query: any;
+    values: any;
+    result: any;
+    constructor(env: DBEnvironment, col: DBCollection, query: any, values: any);
+}
+export declare class DBUnset extends FSM.Fsm {
     col: DBCollection;
     query: any;
     values: any;
