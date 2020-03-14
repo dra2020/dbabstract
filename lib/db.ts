@@ -20,6 +20,62 @@ export interface DBEnvironment
   storageManager: Storage.StorageManager;
 }
 
+export function fromCompactSchema(c: any): any
+{
+  let s: any = [];
+
+  if (c && !Array.isArray(c))
+  {
+    for (let p in c) if (c.hasOwnProperty(p))
+      s.push({ AttributeName: p, AttributeType: c[p] });
+  }
+  else
+    s = c;
+  return s;
+}
+
+export function fromCompactKey(c: any): any
+{
+  let s: any = [];
+
+  if (c && !Array.isArray(c))
+  {
+    for (let p in c) if (c.hasOwnProperty(p))
+      s.push({ AttributeName: p, KeyType: c[p] });
+  }
+  else
+    s = c;
+  return s;
+}
+
+function findHash(c: any): string
+{
+  let h: string = null;
+
+  Object.keys(c).forEach((k: string) => { if (c[k] === 'HASH') h = k } );
+  return h;
+}
+
+export function fromCompactIndex(c: any): any
+{
+  return { KeySchema: fromCompactKey(c), IndexName: findHash(c) };
+}
+
+export function toCompactSchema(s: any): any
+{
+  let c: any = {};
+
+  if (s && Array.isArray(s))
+  {
+    for (let i: number = 0; i < s.length; i++)
+      c[s[i].AttributeName] = s[i].AttributeType;
+  }
+  else
+    c = s;
+
+  return c;
+}
+
 export class DBClient extends FSM.Fsm
 {
   constructor(env: DBEnvironment)
@@ -135,7 +191,7 @@ export class DBQuery extends FSM.Fsm
 {
   col: DBCollection;
   filter: any;
-  result: any[];
+  fsmResult: FSM.FsmArray;
 
   constructor(env: DBEnvironment, col: DBCollection, filter: any)
     {
@@ -143,8 +199,10 @@ export class DBQuery extends FSM.Fsm
       this.waitOn(col);
       this.col = col;
       this.filter = filter;
-      this.result = [];
+      this.fsmResult = new FSM.FsmArray(env);;
     }
+
+  get result(): any[] { return this.fsmResult.a }
 }
 
 export class DBIndex extends FSM.Fsm

@@ -130,6 +130,51 @@ exports.FSM_CREATING = FSM.FSM_CUSTOM1;
 exports.FSM_NEEDRELEASE = FSM.FSM_CUSTOM2;
 exports.FSM_RELEASING = FSM.FSM_CUSTOM3;
 exports.FSM_READING = FSM.FSM_CUSTOM4;
+function fromCompactSchema(c) {
+    let s = [];
+    if (c && !Array.isArray(c)) {
+        for (let p in c)
+            if (c.hasOwnProperty(p))
+                s.push({ AttributeName: p, AttributeType: c[p] });
+    }
+    else
+        s = c;
+    return s;
+}
+exports.fromCompactSchema = fromCompactSchema;
+function fromCompactKey(c) {
+    let s = [];
+    if (c && !Array.isArray(c)) {
+        for (let p in c)
+            if (c.hasOwnProperty(p))
+                s.push({ AttributeName: p, KeyType: c[p] });
+    }
+    else
+        s = c;
+    return s;
+}
+exports.fromCompactKey = fromCompactKey;
+function findHash(c) {
+    let h = null;
+    Object.keys(c).forEach((k) => { if (c[k] === 'HASH')
+        h = k; });
+    return h;
+}
+function fromCompactIndex(c) {
+    return { KeySchema: fromCompactKey(c), IndexName: findHash(c) };
+}
+exports.fromCompactIndex = fromCompactIndex;
+function toCompactSchema(s) {
+    let c = {};
+    if (s && Array.isArray(s)) {
+        for (let i = 0; i < s.length; i++)
+            c[s[i].AttributeName] = s[i].AttributeType;
+    }
+    else
+        c = s;
+    return c;
+}
+exports.toCompactSchema = toCompactSchema;
 class DBClient extends FSM.Fsm {
     constructor(env) {
         super(env);
@@ -208,8 +253,10 @@ class DBQuery extends FSM.Fsm {
         this.waitOn(col);
         this.col = col;
         this.filter = filter;
-        this.result = [];
+        this.fsmResult = new FSM.FsmArray(env);
+        ;
     }
+    get result() { return this.fsmResult.a; }
 }
 exports.DBQuery = DBQuery;
 class DBIndex extends FSM.Fsm {

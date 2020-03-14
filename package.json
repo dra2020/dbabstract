@@ -1,6 +1,6 @@
 {
   "name": "@dra2020/dbabstract",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Simple abstract database layer that allows mocking for local development.",
   "main": "dist/db.js",
   "types": "./dist/all.d.ts",

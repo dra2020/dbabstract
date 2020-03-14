@@ -12,6 +12,10 @@ export interface DBEnvironment {
     fsmManager: FSM.FsmManager;
     storageManager: Storage.StorageManager;
 }
+export declare function fromCompactSchema(c: any): any;
+export declare function fromCompactKey(c: any): any;
+export declare function fromCompactIndex(c: any): any;
+export declare function toCompactSchema(s: any): any;
 export declare class DBClient extends FSM.Fsm {
     constructor(env: DBEnvironment);
     readonly env: DBEnvironment;
@@ -61,8 +65,9 @@ export declare class DBFind extends FSM.Fsm {
 export declare class DBQuery extends FSM.Fsm {
     col: DBCollection;
     filter: any;
-    result: any[];
+    fsmResult: FSM.FsmArray;
     constructor(env: DBEnvironment, col: DBCollection, filter: any);
+    readonly result: any[];
 }
 export declare class DBIndex extends FSM.Fsm {
     col: DBCollection;
