@@ -181,6 +181,8 @@ class DBClient extends FSM.Fsm {
     }
     get env() { return this._env; }
     createCollection(name, options) { return new DBCollection(this.env, this, name, options); }
+    createStream(col) { return null; }
+    closeStream(col) { }
     createUpdate(col, query, values) { return new DBUpdate(this.env, col, query, values); }
     createUnset(col, query, values) { return new DBUnset(this.env, col, query, values); }
     createDelete(col, query) { return new DBDelete(this.env, col, query); }

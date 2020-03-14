@@ -20,6 +20,8 @@ export declare class DBClient extends FSM.Fsm {
     constructor(env: DBEnvironment);
     readonly env: DBEnvironment;
     createCollection(name: string, options: any): DBCollection;
+    createStream(col: DBCollection): FSM.FsmArray;
+    closeStream(col: DBCollection): void;
     createUpdate(col: DBCollection, query: any, values: any): DBUpdate;
     createUnset(col: DBCollection, query: any, values: any): DBUnset;
     createDelete(col: DBCollection, query: any): DBDelete;

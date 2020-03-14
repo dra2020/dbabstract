@@ -86,6 +86,8 @@ export class DBClient extends FSM.Fsm
   get env(): DBEnvironment { return this._env as DBEnvironment; }
 
   createCollection(name: string, options: any): DBCollection {  return new DBCollection(this.env, this, name, options); }
+  createStream(col: DBCollection): FSM.FsmArray { return null; }
+  closeStream(col: DBCollection): void {}
   createUpdate(col: DBCollection, query: any, values: any): DBUpdate { return new DBUpdate(this.env, col, query, values); }
   createUnset(col: DBCollection, query: any, values: any): DBUnset { return new DBUnset(this.env, col, query, values); }
   createDelete(col: DBCollection, query: any): DBDelete { return new DBDelete(this.env, col, query); }
