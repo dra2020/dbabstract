@@ -18,7 +18,7 @@ export declare function fromCompactIndex(c: any): any;
 export declare function toCompactSchema(s: any): any;
 export declare class DBClient extends FSM.Fsm {
     constructor(env: DBEnvironment);
-    readonly env: DBEnvironment;
+    get env(): DBEnvironment;
     createCollection(name: string, options: any): DBCollection;
     createStream(col: DBCollection): FSM.FsmArray;
     closeStream(col: DBCollection): void;
@@ -69,7 +69,7 @@ export declare class DBQuery extends FSM.Fsm {
     filter: any;
     fsmResult: FSM.FsmArray;
     constructor(env: DBEnvironment, col: DBCollection, filter: any);
-    readonly result: any[];
+    get result(): any[];
 }
 export declare class DBIndex extends FSM.Fsm {
     col: DBCollection;
