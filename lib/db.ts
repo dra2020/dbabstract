@@ -53,6 +53,8 @@ function findHash(c: any): string
   let h: string = null;
 
   Object.keys(c).forEach((k: string) => { if (c[k] === 'HASH') h = k } );
+  while (h && h.length < 3)
+    h = `_${h}`;
   return h;
 }
 

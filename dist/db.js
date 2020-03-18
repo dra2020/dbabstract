@@ -158,6 +158,8 @@ function findHash(c) {
     let h = null;
     Object.keys(c).forEach((k) => { if (c[k] === 'HASH')
         h = k; });
+    while (h && h.length < 3)
+        h = `_${h}`;
     return h;
 }
 function fromCompactIndex(c) {
