@@ -1,6 +1,6 @@
 {
   "name": "@dra2020/dbabstract",
-  "version": "1.4.2",
+  "version": "2.0.0",
   "description": "Simple abstract database layer that allows mocking for local development.",
   "main": "dist/db.js",
   "types": "./dist/all.d.ts",
@@ -33,9 +33,9 @@
   },
   "dependencies": {
     "@dra2020/context": "^1.0.14",
-    "@dra2020/fsm": "^1.2.1",
-    "@dra2020/logabstract": "^1.0.14",
-    "@dra2020/storage": "^1.3.1",
-    "@dra2020/util": "^1.0.29"
+    "@dra2020/fsm": "^1.3.1",
+    "@dra2020/logabstract": "^1.0.15",
+    "@dra2020/storage": "^2.0.1",
+    "@dra2020/util": "^1.0.50"
   }
 }
